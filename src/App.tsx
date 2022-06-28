@@ -1,25 +1,81 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import { loginFormSchema } from './hook/schemas/Login.schema';
+import { useForm } from './hook/useForm';
 
 function App() {
+
+  const {
+    form,
+    isError,
+    messageError,
+    handleChange,
+    resetForm
+
+  } = useForm({
+    defaultValues: {
+      name: '',
+      email: '',
+      phone: 123456789,
+      file: [],
+      checkbox: false
+    },
+    resolver: loginFormSchema
+  })
+
+  const { name, email, phone, checkbox } = form
+
+  const handleSubmit = (e: any) => {
+    e.preventDefault()
+  }
+
+  // const handleChange: any = () => handleInputChange
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <form onSubmit={handleSubmit}>
+      <input
+        type='text'
+        name='name'
+        value={name}
+        onChange={handleChange}
+        placeholder='Escribe tu nombre'
+      /> <br />
+       
+      <input
+        type='email'
+        name='email'
+        value={email}
+        onChange={handleChange}
+        placeholder='Escribe tu correo'
+      /> <br />
+
+      {
+        isError && <p>{messageError}</p>
+      }
+
+      <input
+        type='number'
+        name='phone'
+        value={phone}
+        onChange={handleChange}
+        placeholder='Escribe tu telefono'
+      /> <br />
+
+      <input
+        type='file'
+        name='file'
+        onChange={handleChange}
+      /> <br />
+      
+      <input
+        type='checkbox'
+        name='checkbox'
+        checked={checkbox}
+        onChange={handleChange}
+      /> <br />
+
+      <button>Send</button>
+      <button type="reset" onClick={resetForm}>Reset Form</button>
+    </form>
   );
 }
 
